@@ -3,7 +3,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import { TopBar } from "@/components/TopBar";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
-import { LayoutDashboard, Users, MessagesSquare, FileText } from "lucide-react";
+import { LayoutDashboard, Users, MessagesSquare, FileText, UserCheck } from "lucide-react";
 
 interface Stats {
   totalInterviews: number;
@@ -59,6 +59,7 @@ const AdminLayout = () => {
           <AdminTab to="/admin/characters" icon={Users} label="Characters" />
           <AdminTab to="/admin/questions" icon={MessagesSquare} label="Questions" />
           <AdminTab to="/admin/results" icon={FileText} label="Results" />
+          <AdminTab to="/admin/approvals" icon={UserCheck} label="Approvals" />
         </div>
 
         <Outlet />
