@@ -56,15 +56,17 @@ const Auth = () => {
           toast.error(error.message);
           return;
         }
-        toast.success("Account created! You're signed in.");
-        navigate("/dashboard");
+        // Sign out immediately — account requires admin approval
+        await supabase.auth.signOut();
+        toast.success("Registration submitted. An admin will review your account shortly.");
+        setMode("signin");
       } else {
         const parsed = signInSchema.safeParse({ email, password });
         if (!parsed.success) {
           toast.error(parsed.error.issues[0].message);
           return;
         }
-        const { error } = await supabase.auth.signInWithPassword({
+        const { data: signInData, error } = await supabase.auth.signInWithPassword({
           email: parsed.data.email,
           password: parsed.data.password,
         });
@@ -72,6 +74,27 @@ const Auth = () => {
           toast.error(error.message);
           return;
         }
+
+        // Check approval status before allowing access
+        const userId = signInData.user?.id;
+        if (userId) {
+          const { data: profile } = await supabase
+            .from("profiles")
+            .select("approval_status")
+            .eq("id", userId)
+            .maybeSingle();
+
+          if (profile?.approval_status !== "approved") {
+            await supabase.auth.signOut();
+            if (profile?.approval_status === "rejected") {
+              toast.error("Your account application was not approved.");
+            } else {
+              toast.error("Your account is awaiting admin approval.");
+            }
+            return;
+          }
+        }
+
         toast.success("Welcome back!");
         navigate("/dashboard");
       }
