@@ -96,6 +96,9 @@ export type Database = {
       }
       profiles: {
         Row: {
+          approval_status: Database["public"]["Enums"]["approval_status"]
+          approved_at: string | null
+          approved_by: string | null
           avatar_url: string | null
           created_at: string
           email: string | null
@@ -106,6 +109,9 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          approval_status?: Database["public"]["Enums"]["approval_status"]
+          approved_at?: string | null
+          approved_by?: string | null
           avatar_url?: string | null
           created_at?: string
           email?: string | null
@@ -116,6 +122,9 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          approval_status?: Database["public"]["Enums"]["approval_status"]
+          approved_at?: string | null
+          approved_by?: string | null
           avatar_url?: string | null
           created_at?: string
           email?: string | null
@@ -305,6 +314,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "student"
+      approval_status: "pending" | "approved" | "rejected"
       interview_status: "in_progress" | "completed" | "abandoned"
       question_difficulty: "easy" | "medium" | "hard"
     }
@@ -435,6 +445,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "student"],
+      approval_status: ["pending", "approved", "rejected"],
       interview_status: ["in_progress", "completed", "abandoned"],
       question_difficulty: ["easy", "medium", "hard"],
     },
